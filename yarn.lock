@@ -3566,9 +3566,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openmrs/esm-patient-common-lib@portal:/Users/vasharma05/Projects/patient-chart/packages/esm-patient-common-lib::locator=%40openmrs%2Fesm-patient-medical-supply-orders-app%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@openmrs/esm-patient-common-lib@portal:/Users/vasharma05/Projects/patient-chart/packages/esm-patient-common-lib::locator=%40openmrs%2Fesm-patient-medical-supply-orders-app%40workspace%3A."
+"@openmrs/esm-patient-common-lib@npm:next":
+  version: 8.2.1-pre.6162
+  resolution: "@openmrs/esm-patient-common-lib@npm:8.2.1-pre.6162"
   dependencies:
     "@carbon/react": "npm:^1.12.0"
     lodash-es: "npm:^4.17.21"
@@ -3577,8 +3577,9 @@ __metadata:
     "@openmrs/esm-framework": 5.x
     react: 18.x
     single-spa: 6.x
+  checksum: 10/320ed939bd1e5c88c4653667cb9ba64f88caa7e17ae9ac9adc207cac6270633d108d18246e43b7a27940f344ee5a084fa1895e2e040e73319499e6a7d7571d67
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@openmrs/esm-patient-medical-supply-orders-app@workspace:.":
   version: 0.0.0-use.local

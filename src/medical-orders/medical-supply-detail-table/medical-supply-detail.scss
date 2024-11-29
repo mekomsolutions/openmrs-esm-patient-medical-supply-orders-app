@@ -1,0 +1,11 @@
+@use '@carbon/layout';
+@use '@carbon/type';
+@use '@openmrs/esm-styleguide/src/vars' as *;
+
+.label01 {
+  @include type.type-style('label-01');
+}
+
+.order {
+  @include type.type-style('body-short-02');
+}

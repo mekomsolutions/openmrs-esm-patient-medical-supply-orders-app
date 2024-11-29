@@ -6,25 +6,31 @@
   },
   "extensions": [
     {
-      "name": "Red box",
-      "component": "redBox",
-      "slot": "Boxes"
+      "name": "medical-supply-order-panel",
+      "component": "medicalSupplyOrderPanel",
+      "slot": "order-basket-slot",
+      "order": 3
     },
     {
-      "name": "Blue box",
-      "component": "blueBox",
-      "slot": "Boxes"
+      "name": "medicalsupplyorder-action-menu-item",
+      "component": "modifyMedicalSupplyOrderMenuItem",
+      "slot": "medicalsupplyorder-action-menu-items-slot",
+      "order": 0
     },
-        {
-      "name": "Brand box",
-      "component": "blueBox",
-      "slot": "Boxes"
+    {
+      "name": "medicalsupplyorder-detail-table",
+      "component": "medicalSupplyOrderDetailTable",
+      "slot": "medicalsupplyorder-detail-slot"
     }
   ],
   "pages": [
-    {
-      "component": "root",
-      "route": "root"
+  ],
+  "workspaces": [
+      {
+      "name": "medical-supply-orderable-concept-workspace",
+      "title": "searchMedicalSupplyOrderables",
+      "component": "searchMedicalSupplyOrderables",
+      "type": "order"
     }
   ]
 }

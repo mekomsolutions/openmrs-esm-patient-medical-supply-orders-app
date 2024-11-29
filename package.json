@@ -1,9 +1,9 @@
 {
-  "name": "@openmrs/esm-template-app",
+  "name": "@openmrs/esm-patient-medical-supply-orders-app",
   "version": "4.0.0",
   "license": "MPL-2.0",
   "description": "An OpenMRS seed application for building microfrontends",
-  "browser": "dist/openmrs-esm-template-app.js",
+  "browser": "dist/openmrs-esm-patient-medical-supply-orders-app.js",
   "main": "src/index.ts",
   "source": true,
   "scripts": {
@@ -30,29 +30,36 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-template-app.git"
+    "url": "git+https://github.com/openmrs/openmrsesm-patient-medical-supply-orders-app.git"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-template-app#readme",
+  "homepage": "https://github.com/openmrs/openmrsesm-patient-medical-supply-orders-app#readme",
   "publishConfig": {
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-template-app/issues"
+    "url": "https://github.com/openmrs/openmrsesm-patient-medical-supply-orders-app/issues"
   },
   "dependencies": {
-    "@carbon/react": "^1.68.0",
-    "lodash-es": "^4.17.21"
+    "@hookform/resolvers": "^3.9.1",
+    "lodash-es": "^4.17.21",
+    "react-hook-form": "^7.53.2",
+    "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "@openmrs/esm-framework": "*",
+    "@carbon/react": "^1.x",
+    "@openmrs/esm-framework": "5.x",
+    "@openmrs/esm-patient-common-lib": "8.x",
     "dayjs": "1.x",
     "react": "18.x",
     "react-i18next": "11.x",
     "react-router-dom": "6.x",
-    "rxjs": "6.x"
+    "rxjs": "6.x",
+    "swr": "2.x"
   },
   "devDependencies": {
+    "@carbon/react": "^1.71.0",
     "@openmrs/esm-framework": "next",
+    "@openmrs/esm-patient-common-lib": "next",
     "@openmrs/esm-styleguide": "next",
     "@playwright/test": "^1.42.1",
     "@swc/cli": "^0.3.12",
@@ -93,6 +100,7 @@
     "react-router-dom": "^6.14.1",
     "rxjs": "^6.6.7",
     "swc-loader": "^0.2.3",
+    "swr": "^2.2.5",
     "turbo": "^2.2.3",
     "typescript": "^4.9.5",
     "webpack": "^5.88.1",
@@ -102,5 +110,8 @@
     "packages/**/src/**/*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
     "*.{css,scss,ts,tsx}": "prettier --write --list-different"
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "yarn@4.3.1",
+  "resolutions": {
+    "@openmrs/esm-patient-common-lib": "portal:/Users/vasharma05/Projects/patient-chart/packages/esm-patient-common-lib"
+  }
 }

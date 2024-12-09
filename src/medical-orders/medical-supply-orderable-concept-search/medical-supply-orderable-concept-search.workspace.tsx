@@ -55,18 +55,10 @@ const OrderableConceptSearchWorkspace: React.FC<OrderableConceptSearchWorkspaceP
 
   const [currentOrder, setCurrentOrder] = useState<MedicalSupplyOrderBasketItem>(initialOrder);
 
-  const { orderableConceptClasses, orderableConceptSets } = useMemo(
-    () => orderTypes.find((orderType) => orderType.orderTypeUuid === orderTypeUuid),
+  const orderableConceptSets = useMemo(
+    () => orderTypes.find((orderType) => orderType.orderTypeUuid === orderTypeUuid).orderableConceptSets,
 
     [orderTypeUuid, orderTypes],
-  );
-
-  const conceptClasses = useMemo(
-    () =>
-      orderableConceptClasses?.length
-        ? orderableConceptClasses
-        : (orderType?.conceptClasses.map(({ uuid }) => uuid) ?? []),
-    [orderType?.conceptClasses, orderableConceptClasses],
   );
 
   const cancelDrugOrder = useCallback(() => {
@@ -117,7 +109,6 @@ const OrderableConceptSearchWorkspace: React.FC<OrderableConceptSearchWorkspaceP
         <ConceptSearch
           openOrderForm={openOrderForm}
           closeWorkspace={closeWorkspace}
-          orderableConceptClasses={conceptClasses}
           orderableConceptSets={orderableConceptSets}
           orderTypeUuid={orderTypeUuid}
         />
@@ -130,17 +121,10 @@ interface ConceptSearchProps {
   closeWorkspace: DefaultWorkspaceProps['closeWorkspace'];
   openOrderForm: (search: OrderBasketItem) => void;
   orderTypeUuid: string;
-  orderableConceptClasses: Array<string>;
   orderableConceptSets: Array<string>;
 }
 
-function ConceptSearch({
-  closeWorkspace,
-  orderTypeUuid,
-  openOrderForm,
-  orderableConceptClasses,
-  orderableConceptSets,
-}: ConceptSearchProps) {
+function ConceptSearch({ closeWorkspace, orderTypeUuid, openOrderForm, orderableConceptSets }: ConceptSearchProps) {
   const { t } = useTranslation();
   const { orderType } = useOrderType(orderTypeUuid);
   const isTablet = useLayoutType() === 'tablet';
@@ -186,7 +170,6 @@ function ConceptSearch({
         closeWorkspace={closeWorkspace}
         orderTypeUuid={orderTypeUuid}
         cancelOrder={() => {}}
-        orderableConceptClasses={orderableConceptClasses}
         orderableConceptSets={orderableConceptSets}
       />
       {isTablet && (

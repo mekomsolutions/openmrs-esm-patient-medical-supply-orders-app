@@ -22,11 +22,10 @@ const MedicalSupplyOrderPanel: React.FC = () => {
   const { orderTypes } = useConfig<ConfigObject>();
   return (
     <>
-      {orderTypes.map(({ orderTypeUuid, orderableConceptClasses, orderableConceptSets }) => (
+      {orderTypes.map(({ orderTypeUuid, orderableConceptSets }) => (
         <MedicalSupplyOrderType
           key={orderTypeUuid}
           orderTypeUuid={orderTypeUuid}
-          orderableConceptClasses={orderableConceptClasses}
           orderableConceptSets={orderableConceptSets}
         />
       ))}
@@ -36,15 +35,10 @@ const MedicalSupplyOrderPanel: React.FC = () => {
 
 interface MedicalSupplyOrderTypeProps {
   orderTypeUuid: string;
-  orderableConceptClasses: Array<string>;
   orderableConceptSets: Array<string>;
 }
 
-const MedicalSupplyOrderType: React.FC<MedicalSupplyOrderTypeProps> = ({
-  orderTypeUuid,
-  orderableConceptSets,
-  orderableConceptClasses,
-}) => {
+const MedicalSupplyOrderType: React.FC<MedicalSupplyOrderTypeProps> = ({ orderTypeUuid }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const { orderType, isLoadingOrderType } = useOrderType(orderTypeUuid);

@@ -10,14 +10,6 @@ export const configSchema = {
         _type: Type.UUID,
         _description: 'The UUID of the order type with the listed in the order basket',
       },
-      orderableConceptClasses: {
-        _type: Type.Array,
-        _description:
-          'The concept class of the orderable concepts. By default it will look for concept class in the order type response',
-        _elements: {
-          _type: Type.UUID,
-        },
-      },
       orderableConceptSets: {
         _type: Type.Array,
         _description:
@@ -30,7 +22,6 @@ export const configSchema = {
     _default: [
       {
         orderTypeUuid: '67a92bd6-0f88-11ea-8d71-362b9e155667',
-        orderableConceptClasses: [],
         orderableConceptSets: [],
       },
     ],
@@ -42,7 +33,6 @@ export const configSchema = {
       conceptUuid: '162402AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
       map: 'setMembers',
     },
-    // _elements: {
     conceptUuid: {
       _type: Type.UUID,
       _description: 'UUID for the quantity units concepts',
@@ -56,13 +46,11 @@ export const configSchema = {
       _validators: [validators.oneOf(['answers', 'setMembers'])],
     },
   },
-  // },
 };
 
 export type ConfigObject = {
   orderTypes: Array<{
     orderTypeUuid: string;
-    orderableConceptClasses: Array<string>;
     orderableConceptSets: Array<string>;
   }>;
   quantityUnits: {

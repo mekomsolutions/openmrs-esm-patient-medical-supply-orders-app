@@ -29,11 +29,16 @@ export function ordersEqual(order1: OrderBasketItem, order2: OrderBasketItem) {
 
 const careSettingUuid = '6f0c9a92-6f24-11e3-af88-005056821db0';
 
+interface MedicalSupplyOrderPostData extends OrderPost {
+  quantity?: number;
+  quantityUnits?: string;
+}
+
 export function prepOrderPostData(
   order: MedicalSupplyOrderBasketItem,
   patientUuid: string,
   encounterUuid: string | null,
-): OrderPost {
+): MedicalSupplyOrderPostData {
   if (order.action === 'NEW' || order.action === 'RENEW') {
     return {
       action: 'NEW',

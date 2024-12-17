@@ -88,6 +88,7 @@ const MedicalSupplyOrderType: React.FC<MedicalSupplyOrderTypeProps> = ({ orderTy
         launchPatientWorkspace('medical-supply-orderable-concept-workspace', {
           orderTypeUuid,
         }),
+      closeWorkspaceGroup: false,
     });
   };
 
@@ -99,6 +100,7 @@ const MedicalSupplyOrderType: React.FC<MedicalSupplyOrderTypeProps> = ({ orderTy
           order,
           orderTypeUuid,
         }),
+      closeWorkspaceGroup: false,
     });
   };
 

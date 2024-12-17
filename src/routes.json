@@ -30,7 +30,8 @@
       "name": "medical-supply-orderable-concept-workspace",
       "title": "searchMedicalSupplyOrderables",
       "component": "searchMedicalSupplyOrderables",
-      "type": "order"
+      "type": "order",
+      "groups": ["ward-patient"]
     }
   ]
 }

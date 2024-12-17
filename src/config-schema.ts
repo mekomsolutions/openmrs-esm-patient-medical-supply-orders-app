@@ -22,7 +22,7 @@ export const configSchema = {
     _default: [
       {
         orderTypeUuid: '67a92bd6-0f88-11ea-8d71-362b9e155667',
-        orderableConceptSets: [],
+        orderableConceptSets: ['4b573f1d-beb1-401a-92c3-b40409694f98'],
       },
     ],
   },

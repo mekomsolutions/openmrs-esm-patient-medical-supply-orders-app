@@ -1,43 +1,60 @@
-import { Type, validator } from '@openmrs/esm-framework';
+import { Type, validator, validators } from '@openmrs/esm-framework';
+import _default from 'react-hook-form/dist/utils/createSubject';
 
-/**
- * This is the config schema. It expects a configuration object which
- * looks like this:
- *
- * ```json
- * { "casualGreeting": true, "whoToGreet": ["Mom"] }
- * ```
- *
- * In OpenMRS Microfrontends, all config parameters are optional. Thus,
- * all elements must have a reasonable default. A good default is one
- * that works well with the reference application.
- *
- * To understand the schema below, please read the configuration system
- * documentation:
- *   https://openmrs.github.io/openmrs-esm-core/#/main/config
- * Note especially the section "How do I make my module configurable?"
- *   https://openmrs.github.io/openmrs-esm-core/#/main/config?id=im-developing-an-esm-module-how-do-i-make-it-configurable
- * and the Schema Reference
- *   https://openmrs.github.io/openmrs-esm-core/#/main/config?id=schema-reference
- */
 export const configSchema = {
-  casualGreeting: {
-    _type: Type.Boolean,
-    _default: false,
-    _description: 'Whether to use a casual greeting (or a formal one).',
-  },
-  whoToGreet: {
+  orderTypes: {
     _type: Type.Array,
-    _default: ['World'],
-    _description: 'Who should be greeted. Names will be separated by a comma and space.',
     _elements: {
-      _type: Type.String,
+      _type: Type.Object,
+      orderTypeUuid: {
+        _type: Type.UUID,
+        _description: 'The UUID of the order type with the listed in the order basket',
+      },
+      orderableConceptSets: {
+        _type: Type.Array,
+        _description:
+          "UUIDs of concepts that represent orderable concepts. Either the `conceptClass` should be given, or the `orderableConcepts`. If the orderableConcepts are not given, then it'll search concepts by concept class.",
+        _elements: {
+          _type: Type.UUID,
+        },
+      },
     },
-    _validators: [validator((v) => v.length > 0, 'At least one person must be greeted.')],
+    _default: [
+      {
+        orderTypeUuid: '67a92bd6-0f88-11ea-8d71-362b9e155667',
+        orderableConceptSets: ['4b573f1d-beb1-401a-92c3-b40409694f98'],
+      },
+    ],
+  },
+  quantityUnits: {
+    _type: Type.Object,
+    _description: 'Concept to be used for fetching quantity units',
+    _default: {
+      conceptUuid: '162402AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      map: 'setMembers',
+    },
+    conceptUuid: {
+      _type: Type.UUID,
+      _description: 'UUID for the quantity units concepts',
+      _default: '162402AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    map: {
+      _type: Type.UUID,
+      _description:
+        "Whether to use the concept answers of the setMembers of the concept. One of 'answers' or 'setMembers'.",
+      _default: 'setMembers',
+      _validators: [validators.oneOf(['answers', 'setMembers'])],
+    },
   },
 };
 
-export type Config = {
-  casualGreeting: boolean;
-  whoToGreet: Array<string>;
+export type ConfigObject = {
+  orderTypes: Array<{
+    orderTypeUuid: string;
+    orderableConceptSets: Array<string>;
+  }>;
+  quantityUnits: {
+    conceptUuid: string;
+    map: 'answers' | 'setMembers';
+  };
 };

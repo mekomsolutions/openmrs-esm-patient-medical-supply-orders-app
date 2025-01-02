@@ -1,6 +1,6 @@
 {
   "name": "@mekomsolutions/esm-patient-medical-supply-orders-app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "MPL-2.0",
   "description": "An OpenMRS seed application for building microfrontends",
   "browser": "dist/openmrs-esm-patient-medical-supply-orders-app.js",
@@ -31,14 +31,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrsesm-patient-medical-supply-orders-app.git"
+    "url": "git+https://github.com/mekomsolutions/esm-patient-medical-supply-orders-app.git"
   },
-  "homepage": "https://github.com/openmrs/openmrsesm-patient-medical-supply-orders-app#readme",
+  "homepage": "https://github.com/mekomsolutions/esm-patient-medical-supply-orders-app#readme",
   "publishConfig": {
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/openmrs/openmrsesm-patient-medical-supply-orders-app/issues"
+    "url": "https://github.com/mekomsolutions/esm-patient-medical-supply-orders-app/issues"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

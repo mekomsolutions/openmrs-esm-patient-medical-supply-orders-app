@@ -2,10 +2,22 @@
   "env": {
     "node": true
   },
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:jest-dom/recommended"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react-hooks"],
-  "root": true,
+  "plugins": ["@typescript-eslint", "import", "jest-dom", "react-hooks", "testing-library"],
+  "overrides": [
+    {
+      "files": ["**/*.test.tsx"],
+      "extends": ["plugin:testing-library/react"]
+    },
+    {
+      "files": ["e2e/**/*.spec.ts"],
+      "extends": ["plugin:playwright/recommended"],
+      "rules": {
+        "testing-library/prefer-screen-queries": "off"
+      }
+    }
+  ],
   "rules": {
     "react-hooks/exhaustive-deps": "warn",
     "react-hooks/rules-of-hooks": "error",
@@ -22,6 +34,7 @@
         "fixStyle": "inline-type-imports"
       }
     ],
+    "import/no-duplicates": "error",
     "prefer-const": "off",
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-unsafe-optional-chaining": "off",
@@ -33,6 +46,7 @@
       "error",
       {
         "paths": [
+          // These two rules ensure that we're importing lodash and lodash-es correctly. Not doing so can bloat our bundle size significantly.
           {
             "name": "lodash",
             "message": "Import specific methods from `lodash`. e.g. `import map from 'lodash/map'`"
@@ -42,6 +56,7 @@
             "importNames": ["default"],
             "message": "Import specific methods from `lodash-es`. e.g. `import { map } from 'lodash-es'`"
           },
+          // These two rules ensure that we're importing Carbon components and icons from the correct packages (after v10). May be removed in the future.
           {
             "name": "carbon-components-react",
             "message": "Import from `@carbon/react` directly. e.g. `import { Toggle } from '@carbon/react'`"

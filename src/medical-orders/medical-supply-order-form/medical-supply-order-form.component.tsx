@@ -17,6 +17,8 @@ import {
   Grid,
   InlineNotification,
   Layer,
+  NumberInput,
+  SelectSkeleton,
   TextArea,
   TextInput,
 } from '@carbon/react';
@@ -28,9 +30,6 @@ import styles from './medical-supply-order-form.scss';
 import { type Concept, ordersEqual, prepOrderPostData, useQuantityUnits } from '../resources';
 import { moduleName } from '../../constants';
 import { type MedicalSupplyOrderBasketItem } from '../types';
-import { NumberInput } from '@carbon/react';
-import { Select } from '@carbon/react';
-import { SelectSkeleton } from '@carbon/react';
 
 export interface OrderFormProps extends DefaultPatientWorkspaceProps {
   initialOrder: MedicalSupplyOrderBasketItem;

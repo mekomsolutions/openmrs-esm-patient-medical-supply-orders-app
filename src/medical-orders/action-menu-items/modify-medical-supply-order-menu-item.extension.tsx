@@ -1,11 +1,9 @@
-import { OverflowMenuItem } from '@carbon/react';
-import { useLaunchWorkspaceRequiringVisit, useOrderBasket, type Order } from '@openmrs/esm-patient-common-lib';
 import React from 'react';
+import { Layer, OverflowMenu, OverflowMenuItem } from '@carbon/react';
+import { useLaunchWorkspaceRequiringVisit, useOrderBasket, type Order } from '@openmrs/esm-patient-common-lib';
 import { type MedicalSupplyOrderBasketItem } from '../types';
 import { buildMedicalSupplyOrderItem } from '../resources';
 import { useTranslation } from 'react-i18next';
-import { OverflowMenu } from '@carbon/react';
-import { Layer } from '@carbon/react';
 
 interface ModifyMedicalSupplyOrderMenuItemProps {
   orderItem: Order;

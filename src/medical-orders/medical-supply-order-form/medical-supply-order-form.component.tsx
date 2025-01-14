@@ -61,7 +61,7 @@ export function OrderForm({
   const OrderFormSchema = useMemo(
     () =>
       z.object({
-        instructions: z.string().optional(),
+        instructions: z.string().nullish(),
         urgency: z.string().refine((value) => value !== '', {
           message: t('addLabOrderPriorityRequired', 'Priority is required'),
         }),
@@ -79,7 +79,7 @@ export function OrderForm({
             invalid_type_error: t('quantityUnitsRequired', 'Quantity units is required'),
           },
         ),
-        accessionNumber: z.string().optional(),
+        accessionNumber: z.string().nullish(),
         concept: z.object(
           { display: z.string(), uuid: z.string() },
           {

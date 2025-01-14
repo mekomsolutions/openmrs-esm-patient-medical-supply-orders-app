@@ -19,6 +19,8 @@ import {
   Layer,
   NumberInput,
   SelectSkeleton,
+  Select,
+  SelectItem,
   TextArea,
   TextInput,
 } from '@carbon/react';
@@ -268,19 +270,19 @@ export function OrderForm({
                 <Controller
                   name="urgency"
                   control={control}
-                  render={({ field: { onBlur, onChange, value } }) => (
-                    <ComboBox
-                      id="priorityInput"
-                      invalid={!!errors.urgency}
-                      invalidText={errors.urgency?.message}
-                      items={priorityOptions}
-                      onBlur={onBlur}
-                      onChange={({ selectedItem }) => onChange(selectedItem?.value || '')}
-                      selectedItem={priorityOptions.find((option) => option.value === value) || null}
-                      shouldFilterItem={filterItemsByName}
+                  render={({ field, fieldState }) => (
+                    <Select
+                      id="priorityField"
+                      {...field}
+                      invalid={Boolean(fieldState.error?.message)}
+                      invalidText={fieldState.error?.message}
+                      labelText={t('priority', 'Priority')}
                       size={responsiveSize}
-                      titleText={t('priority', 'Priority')}
-                    />
+                    >
+                      {priorityOptions.map((priority) => (
+                        <SelectItem key={priority.value} value={priority.value} text={priority.label} />
+                      ))}
+                    </Select>
                   )}
                 />
               </InputWrapper>

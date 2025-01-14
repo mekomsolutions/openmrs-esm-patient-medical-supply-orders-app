@@ -30,6 +30,7 @@ import styles from './medical-supply-order-form.scss';
 import { type Concept, ordersEqual, prepOrderPostData, useQuantityUnits } from '../resources';
 import { moduleName } from '../../constants';
 import { type MedicalSupplyOrderBasketItem } from '../types';
+import { type ConfigObject } from '../../config-schema';
 
 export interface OrderFormProps extends DefaultPatientWorkspaceProps {
   initialOrder: MedicalSupplyOrderBasketItem;
@@ -55,6 +56,7 @@ export function OrderForm({
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const { orderType } = useOrderType(orderTypeUuid);
   const { concepts, isLoadingQuantityUnits, errorFetchingQuantityUnits } = useQuantityUnits();
+  const { showReferenceNumberField } = useConfig<ConfigObject>();
 
   const OrderFormSchema = useMemo(
     () =>
@@ -167,31 +169,31 @@ export function OrderForm({
               </InputWrapper>
             </Column>
           </Grid>
-          <Grid className={styles.gridRow}>
-            <Column lg={16} md={8} sm={4}>
-              <InputWrapper>
-                <Controller
-                  name="accessionNumber"
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      id="labReferenceNumberInput"
-                      invalid={!!errors.accessionNumber}
-                      invalidText={errors.accessionNumber?.message}
-                      labelText={t('testOrderReferenceNumber', '{{orderType}} reference number', {
-                        orderType: orderType?.display,
-                      })}
-                      maxLength={150}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      size={responsiveSize}
-                      value={value}
-                    />
-                  )}
-                />
-              </InputWrapper>
-            </Column>
-          </Grid>
+          {showReferenceNumberField && (
+            <Grid className={styles.gridRow}>
+              <Column lg={16} md={8} sm={4}>
+                <InputWrapper>
+                  <Controller
+                    name="accessionNumber"
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        id="labReferenceNumberInput"
+                        invalid={!!errors.accessionNumber}
+                        invalidText={errors.accessionNumber?.message}
+                        labelText={t('referenceFieldLabelText', 'Reference number')}
+                        maxLength={150}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        size={responsiveSize}
+                        value={value}
+                      />
+                    )}
+                  />
+                </InputWrapper>
+              </Column>
+            </Grid>
+          )}
 
           <Grid className={styles.gridRow}>
             <Column lg={16} md={8} sm={4}>

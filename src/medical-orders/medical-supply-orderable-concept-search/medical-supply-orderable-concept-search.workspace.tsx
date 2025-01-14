@@ -14,7 +14,7 @@ import {
   useOrderType,
   usePatientChartStore,
 } from '@openmrs/esm-patient-common-lib';
-import React, { type ComponentProps, useCallback, useMemo, useRef, useState } from 'react';
+import React, { type ComponentProps, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './medical-supply-orderable-concept-search.scss';
 import { Button, Search } from '@carbon/react';
@@ -45,6 +45,7 @@ const OrderableConceptSearchWorkspace: React.FC<OrderableConceptSearchWorkspaceP
   closeWorkspace,
   closeWorkspaceWithSavedChanges,
   promptBeforeClosing,
+  setTitle,
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
@@ -52,6 +53,16 @@ const OrderableConceptSearchWorkspace: React.FC<OrderableConceptSearchWorkspaceP
   const { patientUuid } = usePatientChartStore();
   const { orderType } = useOrderType(orderTypeUuid);
   const { orderTypes } = useConfig<ConfigObject>();
+
+  useEffect(() => {
+    if (orderType) {
+      setTitle(
+        t('addOrderForOrderType', 'Add {{orderTypeDisplay}}', {
+          orderTypeDisplay: orderType.display.toLocaleLowerCase(),
+        }),
+      );
+    }
+  }, [setTitle, orderType, t]);
 
   const [currentOrder, setCurrentOrder] = useState<MedicalSupplyOrderBasketItem>(initialOrder);
 

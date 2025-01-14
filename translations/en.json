@@ -29,6 +29,7 @@
   "returnToOrderBasket": "Return to order basket",
   "saveOrder": "Save order",
   "searchAgain": "search again",
+  "searchMedicalSupplyOrderables": "Search medical supply orderables",
   "searchResultsMatchesForTerm_one": "{{count}} results for \"{{searchTerm}}\"",
   "searchResultsMatchesForTerm_other": "{{count}} results for \"{{searchTerm}}\"",
   "testOrderReferenceNumber": "{{orderType}} reference number",

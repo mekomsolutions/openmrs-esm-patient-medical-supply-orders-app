@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
   type DefaultPatientWorkspaceProps,
@@ -6,8 +6,9 @@ import {
   useOrderBasket,
   useOrderType,
   priorityOptions,
+  type OrderUrgency,
 } from '@openmrs/esm-patient-common-lib';
-import { translateFrom, useLayoutType, useSession, useConfig, ExtensionSlot } from '@openmrs/esm-framework';
+import { useLayoutType, useSession, useConfig, ExtensionSlot, OpenmrsDatePicker } from '@openmrs/esm-framework';
 import {
   Button,
   ButtonSet,
@@ -25,12 +26,11 @@ import {
   TextInput,
 } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { Controller, type FieldErrors, useForm } from 'react-hook-form';
+import { Controller, type ControllerRenderProps, type FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import styles from './medical-supply-order-form.scss';
 import { type Concept, ordersEqual, prepOrderPostData, useQuantityUnits } from '../resources';
-import { moduleName } from '../../constants';
 import { type MedicalSupplyOrderBasketItem } from '../types';
 import { type ConfigObject } from '../../config-schema';
 
@@ -62,34 +62,40 @@ export function OrderForm({
 
   const OrderFormSchema = useMemo(
     () =>
-      z.object({
-        instructions: z.string().nullish(),
-        urgency: z.string().refine((value) => value !== '', {
-          message: t('addLabOrderPriorityRequired', 'Priority is required'),
+      z
+        .object({
+          instructions: z.string().nullish(),
+          urgency: z.string().refine((value) => value !== '', {
+            message: t('addLabOrderPriorityRequired', 'Priority is required'),
+          }),
+          quantity: z.number({
+            required_error: t('quantityRequired', 'Quantity is required'),
+            invalid_type_error: t('quantityRequired', 'Quantity is required'),
+          }),
+          quantityUnits: z.object(
+            {
+              display: z.string(),
+              uuid: z.string(),
+            },
+            {
+              required_error: t('quantityUnitsRequired', 'Quantity units is required'),
+              invalid_type_error: t('quantityUnitsRequired', 'Quantity units is required'),
+            },
+          ),
+          accessionNumber: z.string().nullish(),
+          concept: z.object(
+            { display: z.string(), uuid: z.string() },
+            {
+              required_error: t('addOrderableConceptRequired', 'Orderable concept is required'),
+              invalid_type_error: t('addOrderableConceptRequired', 'Orderable concept is required'),
+            },
+          ),
+          scheduledDate: z.date().nullish(),
+        })
+        .refine((data) => data.urgency !== 'ON_SCHEDULED_DATE' || Boolean(data.scheduledDate), {
+          message: t('scheduledDateRequired', 'Scheduled date is required'),
+          path: ['scheduledDate'],
         }),
-        quantity: z.number({
-          required_error: t('quantityRequired', 'Quantity is required'),
-          invalid_type_error: t('quantityRequired', 'Quantity is required'),
-        }),
-        quantityUnits: z.object(
-          {
-            display: z.string(),
-            uuid: z.string(),
-          },
-          {
-            required_error: t('quantityUnitsRequired', 'Quantity units is required'),
-            invalid_type_error: t('quantityUnitsRequired', 'Quantity units is required'),
-          },
-        ),
-        accessionNumber: z.string().nullish(),
-        concept: z.object(
-          { display: z.string(), uuid: z.string() },
-          {
-            required_error: t('addOrderableConceptRequired', 'Orderable concept is required'),
-            invalid_type_error: t('addOrderableConceptRequired', 'Orderable concept is required'),
-          },
-        ),
-      }),
     [t],
   );
 
@@ -97,6 +103,8 @@ export function OrderForm({
     control,
     handleSubmit,
     formState: { errors, defaultValues, isDirty },
+    setValue,
+    watch,
   } = useForm<MedicalSupplyOrderBasketItem>({
     mode: 'all',
     resolver: zodResolver(OrderFormSchema),
@@ -105,9 +113,7 @@ export function OrderForm({
     },
   });
 
-  const filterItemsByName = useCallback((menu) => {
-    return menu?.item?.value?.toLowerCase().includes(menu?.inputValue?.toLowerCase());
-  }, []);
+  const isScheduledDateRequired = watch('urgency') === 'ON_SCHEDULED_DATE';
 
   const handleFormSubmission = useCallback(
     (data: MedicalSupplyOrderBasketItem) => {
@@ -155,6 +161,19 @@ export function OrderForm({
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
+
+  const handleUpdateUrgency = useCallback(
+    (fieldOnChange: ControllerRenderProps['onChange']) => {
+      return (e: ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value as OrderUrgency;
+        if (value !== 'ON_SCHEDULED_DATE') {
+          setValue('scheduledDate', null);
+        }
+        fieldOnChange(e);
+      };
+    },
+    [setValue],
+  );
 
   const responsiveSize = isTablet ? 'lg' : 'sm';
 
@@ -274,6 +293,7 @@ export function OrderForm({
                     <Select
                       id="priorityField"
                       {...field}
+                      onChange={handleUpdateUrgency(field.onChange)}
                       invalid={Boolean(fieldState.error?.message)}
                       invalidText={fieldState.error?.message}
                       labelText={t('priority', 'Priority')}
@@ -288,6 +308,30 @@ export function OrderForm({
               </InputWrapper>
             </Column>
           </Grid>
+
+          {isScheduledDateRequired && (
+            <Grid className={styles.gridRow}>
+              <Column lg={8} md={8} sm={4}>
+                <InputWrapper>
+                  <Controller
+                    name="scheduledDate"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <OpenmrsDatePicker
+                        labelText={t('scheduledDate', 'Scheduled date')}
+                        id="scheduledDate"
+                        {...field}
+                        minDate={new Date()}
+                        invalid={Boolean(fieldState?.error?.message)}
+                        invalidText={fieldState?.error?.message}
+                      />
+                    )}
+                  />
+                </InputWrapper>
+              </Column>
+            </Grid>
+          )}
+
           <Grid className={styles.gridRow}>
             <Column lg={16} md={8} sm={4}>
               <InputWrapper>

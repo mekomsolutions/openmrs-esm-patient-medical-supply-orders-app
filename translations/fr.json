@@ -29,6 +29,8 @@
   "removeFromBasket": "Retirer du panier",
   "returnToOrderBasket": "Retourner au panier de commande",
   "saveOrder": "Enregistrer la commande",
+  "scheduledDate": "Scheduled date",
+  "scheduledDateRequired": "Scheduled date is required",
   "searchAgain": "Rechercher à nouveau",
   "searchMedicalSupplyOrderables": "Search medical supply orderables",
   "searchResultsMatchesForTerm_one": "{{count}} résultats pour \"{{searchTerm}}\"",

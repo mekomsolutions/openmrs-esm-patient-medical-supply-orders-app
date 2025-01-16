@@ -140,6 +140,7 @@ export function OrderForm({
 
       closeWorkspaceWithSavedChanges({
         onWorkspaceClose: () => launchPatientWorkspace('order-basket'),
+        closeWorkspaceGroup: false,
       });
     },
     [orders, setOrders, session?.currentProvider?.uuid, closeWorkspaceWithSavedChanges, initialOrder],
@@ -149,6 +150,7 @@ export function OrderForm({
     setOrders(orders.filter((order) => order.concept.uuid !== defaultValues.concept.conceptUuid));
     closeWorkspace({
       onWorkspaceClose: () => launchPatientWorkspace('order-basket'),
+      closeWorkspaceGroup: false,
     });
   }, [closeWorkspace, orders, setOrders, defaultValues]);
 

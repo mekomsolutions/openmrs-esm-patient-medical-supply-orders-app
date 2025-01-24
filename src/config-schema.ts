@@ -26,6 +26,12 @@ export const configSchema = {
       },
     ],
   },
+  showReferenceNumberField: {
+    _type: Type.Boolean,
+    _default: true,
+    _description:
+      'Whether to display the Reference number field in the Order form. This field maps to the accesion_number property in the Order data model',
+  },
   quantityUnits: {
     _type: Type.Object,
     _description: 'Concept to be used for fetching quantity units',
@@ -53,6 +59,7 @@ export type ConfigObject = {
     orderTypeUuid: string;
     orderableConceptSets: Array<string>;
   }>;
+  showReferenceNumberField: boolean;
   quantityUnits: {
     conceptUuid: string;
     map: 'answers' | 'setMembers';

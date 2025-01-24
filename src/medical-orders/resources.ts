@@ -8,7 +8,14 @@ import {
   type OrderAction,
 } from '@openmrs/esm-patient-common-lib';
 import { type MedicalSupplyOrderBasketItem } from './types';
-import { openmrsFetch, type OpenmrsResource, restBaseUrl, type FetchResponse, useConfig } from '@openmrs/esm-framework';
+import {
+  openmrsFetch,
+  type OpenmrsResource,
+  restBaseUrl,
+  type FetchResponse,
+  useConfig,
+  toOmrsIsoString,
+} from '@openmrs/esm-framework';
 import useSWRImmutable from 'swr/immutable';
 import { useEffect, useMemo } from 'react';
 import { type ConfigObject } from '../config-schema';
@@ -53,6 +60,7 @@ export function prepOrderPostData(
       accessionNumber: order.accessionNumber,
       urgency: order.urgency,
       orderType: order.orderType,
+      scheduledDate: order.scheduledDate ? toOmrsIsoString(order.scheduledDate) : null,
       quantity: order.quantity,
       quantityUnits: order.quantityUnits.uuid,
     };
@@ -70,6 +78,7 @@ export function prepOrderPostData(
       accessionNumber: order.accessionNumber,
       urgency: order.urgency,
       orderType: order.orderType,
+      scheduledDate: order.scheduledDate ? toOmrsIsoString(order.scheduledDate) : null,
       quantity: order.quantity,
       quantityUnits: order.quantityUnits.uuid,
     };
@@ -86,6 +95,7 @@ export function prepOrderPostData(
       accessionNumber: order.accessionNumber,
       urgency: order.urgency,
       orderType: order.orderType,
+      scheduledDate: order.scheduledDate ? toOmrsIsoString(order.scheduledDate) : null,
     };
   } else {
     throw new Error(`Unknown order action: ${order.action}.`);
@@ -138,5 +148,6 @@ export function buildMedicalSupplyOrderItem(order: Order, action: OrderAction): 
     orderType: order.orderType.uuid,
     quantity: order.quantity,
     quantityUnits: order.quantityUnits,
+    scheduledDate: order.scheduledDate ? new Date(order.scheduledDate) : null,
   };
 }

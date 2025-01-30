@@ -37,7 +37,7 @@
   "searchFieldOrder": "Search for {{orderType}} order",
   "searchMedicalSupplyOrderables": "Chercher le matériel ou fourntitures medicales",
   "searchResultsMatchesForTerm_one": "{{count}} résultats pour \"{{searchTerm}}\"",
-  "searchResultsMatchesForTerm_many": "{{count}} results for \"{{searchTerm}}\"",
+  "searchResultsMatchesForTerm_many": "{{count}} résultats pour \"{{searchTerm}}\"",
   "searchResultsMatchesForTerm_other": "{{count}} résultats pour \"{{searchTerm}}\"",
   "testType": "Type de materiel medical",
   "trySearchingAgain": "Veuillez essayer de chercher à nouveau",

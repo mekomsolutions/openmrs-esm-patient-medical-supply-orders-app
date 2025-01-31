@@ -19,7 +19,7 @@
     "coverage": "yarn test --coverage",
     "prepare": "husky install",
     "postinstall": "husky install",
-    "extract-translations": "i18next 'src/**/*.component.tsx' 'src/index.ts' --config ./i18next-parser.config.js",
+    "extract-translations": "i18next 'src/**/*.component.tsx' 'src/**/*.workspace.tsx' 'src/index.ts' --config ./i18next-parser.config.js",
     "test-e2e": "playwright test"
   },
   "browserslist": [

@@ -1,6 +1,5 @@
 import {
   ArrowLeftIcon,
-  getDefaultsFromConfigSchema,
   ResponsiveWrapper,
   useConfig,
   useDebounce,

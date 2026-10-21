@@ -1,14 +1,14 @@
 import React, { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
+import { useOrderBasket, useOrderType, priorityOptions, type OrderUrgency } from '@openmrs/esm-patient-common-lib';
 import {
-  type DefaultPatientWorkspaceProps,
-  launchPatientWorkspace,
-  useOrderBasket,
-  useOrderType,
-  priorityOptions,
-  type OrderUrgency,
-} from '@openmrs/esm-patient-common-lib';
-import { useLayoutType, useSession, useConfig, ExtensionSlot, OpenmrsDatePicker } from '@openmrs/esm-framework';
+  useLayoutType,
+  useSession,
+  useConfig,
+  ExtensionSlot,
+  OpenmrsDatePicker,
+  type Workspace2DefinitionProps,
+} from '@openmrs/esm-framework';
 import {
   Button,
   ButtonSet,
@@ -34,10 +34,13 @@ import { type Concept, ordersEqual, prepOrderPostData, useQuantityUnits } from '
 import { type MedicalSupplyOrderBasketItem } from '../types';
 import { type ConfigObject } from '../../config-schema';
 
-export interface OrderFormProps extends DefaultPatientWorkspaceProps {
+export interface OrderFormProps {
   initialOrder: MedicalSupplyOrderBasketItem;
   orderTypeUuid: string;
   orderableConceptSets: Array<string>;
+  returnToOrderBasket: Workspace2DefinitionProps['closeWorkspace'];
+  setHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
+  patient: fhir.Patient;
 }
 
 // Designs:
@@ -45,16 +48,16 @@ export interface OrderFormProps extends DefaultPatientWorkspaceProps {
 //   https://app.zeplin.io/project/60d5947dd636aebbd63dce4c/screen/640b06d286e0aa7b0316db4a
 export function OrderForm({
   initialOrder,
-  closeWorkspace,
-  closeWorkspaceWithSavedChanges,
-  promptBeforeClosing,
+  returnToOrderBasket,
+  setHasUnsavedChanges,
+  patient,
   orderTypeUuid,
 }: OrderFormProps) {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const session = useSession();
   const isEditing = useMemo(() => initialOrder && initialOrder.action === 'REVISE', [initialOrder]);
-  const { orders, setOrders } = useOrderBasket<MedicalSupplyOrderBasketItem>(orderTypeUuid, prepOrderPostData);
+  const { orders, setOrders } = useOrderBasket<MedicalSupplyOrderBasketItem>(patient, orderTypeUuid, prepOrderPostData);
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const { orderType } = useOrderType(orderTypeUuid);
   const { concepts, isLoadingQuantityUnits, errorFetchingQuantityUnits } = useQuantityUnits();
@@ -138,21 +141,18 @@ export function OrderForm({
 
       setOrders(newOrders);
 
-      closeWorkspaceWithSavedChanges({
-        onWorkspaceClose: () => launchPatientWorkspace('order-basket'),
-        closeWorkspaceGroup: false,
-      });
+      returnToOrderBasket({ discardUnsavedChanges: true });
     },
-    [orders, setOrders, session?.currentProvider?.uuid, closeWorkspaceWithSavedChanges, initialOrder],
+    [orders, setOrders, session?.currentProvider?.uuid, returnToOrderBasket, initialOrder],
   );
 
   const cancelOrder = useCallback(() => {
-    setOrders(orders.filter((order) => order.concept.uuid !== defaultValues.concept.conceptUuid));
-    closeWorkspace({
-      onWorkspaceClose: () => launchPatientWorkspace('order-basket'),
-      closeWorkspaceGroup: false,
+    returnToOrderBasket().then((didClose) => {
+      if (didClose) {
+        setOrders(orders.filter((order) => order.concept.uuid !== defaultValues.concept.conceptUuid));
+      }
     });
-  }, [closeWorkspace, orders, setOrders, defaultValues]);
+  }, [returnToOrderBasket, orders, setOrders, defaultValues]);
 
   const onError = (errors: FieldErrors<MedicalSupplyOrderBasketItem>) => {
     if (errors) {
@@ -161,8 +161,8 @@ export function OrderForm({
   };
 
   useEffect(() => {
-    promptBeforeClosing(() => isDirty);
-  }, [isDirty, promptBeforeClosing]);
+    setHasUnsavedChanges(isDirty);
+  }, [isDirty, setHasUnsavedChanges]);
 
   const handleUpdateUrgency = useCallback(
     (fieldOnChange: ControllerRenderProps['onChange']) => {
@@ -228,11 +228,10 @@ export function OrderForm({
                     <NumberInput
                       {...field}
                       id="quantity"
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.value != '' && e.target.value != null ? parseInt(e.target.value) : undefined,
-                        )
-                      }
+                      onChange={(e) => {
+                        const value = (e.target as HTMLInputElement).value;
+                        field.onChange(value !== '' ? parseInt(value) : undefined);
+                      }}
                       invalid={Boolean(error?.message)}
                       invalidText={error?.message}
                       label={t('quantity', 'Quantity')}
@@ -350,7 +349,6 @@ export function OrderForm({
                       maxCount={500}
                       onBlur={onBlur}
                       onChange={onChange}
-                      size={responsiveSize}
                       value={value}
                     />
                   )}

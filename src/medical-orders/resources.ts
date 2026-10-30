@@ -24,9 +24,10 @@ export function createEmptyOrder(concept: OrderableConcept, orderer: string): Me
   return {
     action: 'NEW',
     urgency: priorityOptions[0].value as OrderUrgency,
-    display: concept.label,
+    display: concept.display,
     concept,
     orderer,
+    visit: null,
   };
 }
 
@@ -149,5 +150,6 @@ export function buildMedicalSupplyOrderItem(order: Order, action: OrderAction): 
     quantity: order.quantity,
     quantityUnits: order.quantityUnits,
     scheduledDate: order.scheduledDate ? new Date(order.scheduledDate) : null,
+    visit: null,
   };
 }
